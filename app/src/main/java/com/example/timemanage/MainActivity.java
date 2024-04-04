@@ -1,9 +1,11 @@
 package com.example.timemanage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,10 +15,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
+    private Fragment fragment_main;
+    private Fragment fragment_lock;
+    private Fragment fragment_statistic;
     public void createAddDialog() {
         //创建 一个提示对话框的构造者对象
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -86,21 +99,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("周一");
-        arrayList.add("周二");
-        arrayList.add("周三");
-        arrayList.add("周四");
-        arrayList.add("周五");
-        arrayList.add("周六");
-        arrayList.add("周日");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,arrayList);
-        spinner.setAdapter(arrayAdapter);
-
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragment_main = new MainFragment();
+        fragment_lock = new LockFragment();
+        fragment_statistic = new StatisticFragment();
+        fragmentTransaction.add(R.id.fragment_layout,fragment_main);
+        fragmentTransaction.commit();
+        BottomNavigationView bottomNavigationItemView = findViewById(R.id.bottomnavigation);
+        bottomNavigationItemView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                switch (menuItem.getItemId()){
+                    case R.id.item_tab1:
+                        fragmentTransaction.replace(R.id.fragment_layout,  fragment_main);
+                        break;
+                    case R.id.item_tab2:
+                        fragmentTransaction.replace(R.id.fragment_layout, fragment_lock);
+                        break;
+                    case R.id.item_tab3:
+                        fragmentTransaction.replace(R.id.fragment_layout, fragment_statistic);
+                        break;
+                }
+                fragmentTransaction.commit();
+                return true;
+            }
+        });
 
     }
 
