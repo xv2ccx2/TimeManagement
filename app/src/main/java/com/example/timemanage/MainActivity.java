@@ -117,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.item_tab2:
                         fragmentTransaction.replace(R.id.fragment_layout, fragment_lock);
+                        //跳转计时
+//                        fragmentTransaction.addToBackStack(null);
+//                        fragmentTransaction.commit();
                         break;
                     case R.id.item_tab3:
                         fragmentTransaction.replace(R.id.fragment_layout, fragment_statistic);

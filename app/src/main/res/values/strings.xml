@@ -11,4 +11,5 @@
         <item>周六</item>
         <item>周日</item>
     </string-array>
+    <string name="title_activity_clock">ClockActivity</string>
 </resources>
