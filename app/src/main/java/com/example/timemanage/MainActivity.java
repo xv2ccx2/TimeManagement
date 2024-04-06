@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         myDatabaseHelper = new DatabaseHelper(this,"Course.db",null,1);
         myDatabaseHelper.getWritableDatabase();
+        myDatabaseHelper = new DatabaseHelper(this,"SCHEDULE.db",null,1);
+        myDatabaseHelper.getWritableDatabase();
         bottomNavigationItemView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -70,7 +72,5 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
-
 }
