@@ -14,6 +14,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "startTime integer,"
             + "endTime integer,"
             + "week integer)";
+
+    //日程信息用于数据统计
+    public static final String SCHEDULE = "create table schedule("
+            + "id integer primary key autoincrement,"
+            + "schedule_name text,"
+//            + "schedule_startTime integer,"
+//            + "schedule_endTime integer,"
+            + "schedule_dateTime String,"
+            + "schedule_sum_time integer)";
     private Context mContext;
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -24,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //System.out.println(COURSE);
         db.execSQL(COURSE);
+        db.execSQL(SCHEDULE);
         //Toast.makeText(mContext, "Create succeed", Toast.LENGTH_SHORT).show();
     }
 
