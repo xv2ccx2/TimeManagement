@@ -12,14 +12,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,6 +89,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         androidx.appcompat.widget.Toolbar toolbar = root.findViewById(R.id.toolbar);
+        Spinner week_select = root.findViewById(R.id.spinner);
         mainContext = getActivity();
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -97,6 +102,40 @@ public class MainFragment extends Fragment {
                 return false;
             }
         });
+
+        week_select.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getItemAtPosition(position);
+                int week = switch (selectedItem) {
+                    case "周一" -> 1;
+                    case "周二" -> 2;
+                    case "周三" -> 3;
+                    case "周四" -> 4;
+                    case "周五" -> 5;
+                    case "周六" -> 6;
+                    case "周日" -> 7;
+                    default -> 1;
+                };
+                Fragment fragment = new ShowCourseFragment(week);
+                FragmentManager fragmentManager = getChildFragmentManager();;
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.fragment_layout_2,fragment);
+                fragmentTransaction.commit();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+
+
+
+
         return root;
     }
 
@@ -109,6 +148,7 @@ public class MainFragment extends Fragment {
 
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.activity_add_dialog, null);
+        EditText editText = view.findViewById(R.id.editText);
         Spinner week_spinner = (Spinner) view.findViewById(R.id.week_spinner);
         Spinner time_spinner_1 = (Spinner) view.findViewById(R.id.time_spinner_1);
         Spinner time_spinner_2 = (Spinner) view.findViewById(R.id.time_spinner_2);
@@ -143,24 +183,39 @@ public class MainFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 SQLiteDatabase db = new DatabaseHelper(mainContext,"Course.db",null,1)
                         .getWritableDatabase();
-//                ContentValues values = new ContentValues();
-//                // 开始组装第一条数据
-//                values.put("id", 1);
-//                values.put("name", "数据结构");
-//                values.put("startTime", 1);
-//                values.put("endTime", 2);
-//                values.put("week",1);
-//                db.insert("Course",null,values);
-                String name ="";
-                Cursor cursor = db.query("Course", null, null, null, null, null, null);
-                while (cursor.moveToNext()){
-                    name = cursor.getString(cursor.getColumnIndex("name"));
+                String t1 = time_spinner_1.getSelectedItem().toString();
+                String t2 = time_spinner_2.getSelectedItem().toString();
+                if((editText.getText() == null) || (Integer.parseInt(t1) >= Integer.parseInt(t2)) ){
+                    Toast.makeText(mainContext, "添加失败，格式错误", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }else{
+                    Cursor cursor = db.query("Course", null, null, null, null, null, null);
+                    int count = cursor.getCount();
+                    int week = switch (week_spinner.getSelectedItem().toString()) {
+                        case "周一" -> 1;
+                        case "周二" -> 2;
+                        case "周三" -> 3;
+                        case "周四" -> 4;
+                        case "周五" -> 5;
+                        case "周六" -> 6;
+                        case "周日" -> 7;
+                        default -> 1;
+                    };
+                    ContentValues values = new ContentValues();
+                    values.put("id", count+1);
+                    values.put("name", String.valueOf(editText.getText()));
+                    values.put("startTime", Integer.parseInt(t1));
+                    values.put("endTime", Integer.parseInt(t2));
+                    values.put("week",week);
+                    db.insert("Course",null,values);
+//                String name ="";
+//                //Cursor cursor = db.query("Course", null, null, null, null, null, null);
+//                while (cursor.moveToNext()){
+//                    name = cursor.getString(cursor.getColumnIndex("name"));
+//                }
+                    Toast.makeText(mainContext, String.valueOf(count), Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
                 }
-
-
-
-                Toast.makeText(mainContext, name, Toast.LENGTH_SHORT).show();
-                dialog.cancel();
             }
         });
         builder.show();

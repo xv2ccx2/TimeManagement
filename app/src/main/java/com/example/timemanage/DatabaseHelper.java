@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //System.out.println(COURSE);
         db.execSQL(COURSE);
-        Toast.makeText(mContext, "Create succeed", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "Create succeed", Toast.LENGTH_SHORT).show();
     }
 
     @Override

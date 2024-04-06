@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 switch (menuItem.getItemId()){
                     case R.id.item_tab1:
-                        fragmentTransaction.replace(R.id.fragment_layout,  fragment_main);
+                        fragmentTransaction.replace(R.id.fragment_layout, fragment_main);
                         break;
                     case R.id.item_tab2:
                         fragmentTransaction.replace(R.id.fragment_layout, fragment_lock);
