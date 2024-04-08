@@ -14,6 +14,7 @@ public class AddDialog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dialog);
+        int a;
 //        Spinner week_spinner = (Spinner) findViewById(R.id.week_spinner);
 //        Spinner time_spinner_1 = (Spinner) findViewById(R.id.time_spinner_1);
 //        Spinner time_spinner_2 = (Spinner) findViewById(R.id.time_spinner_2);
