@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.item_tab3:
                         fragmentTransaction.replace(R.id.fragment_layout, fragment_statistic);
                         break;
+                    case R.id.item_tab4:
+                        Intent intent = new Intent(getApplicationContext(),WenXinTest.class);
+                        intent.setPackage("com.example.timemanage");
+                        startActivity(intent);
                 }
                 fragmentTransaction.commit();
                 return true;
