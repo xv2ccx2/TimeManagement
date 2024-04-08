@@ -1,24 +1,37 @@
 package com.example.timemanage;
 
+import static android.content.Context.WINDOW_SERVICE;
+
+import static androidx.core.content.ContextCompat.getSystemService;
+import static androidx.core.content.ContextCompat.startForegroundService;
+
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
@@ -101,6 +114,42 @@ public class LockFragment extends Fragment {
         }
 
     }
+    //实现弹窗操作 当activity不在前台时 跳出弹窗
+
+    //    @Override
+//    public void onPause() {
+//            super.onPause();
+//            // Activity 进入后台
+//
+//            // 创建弹窗
+//            final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+//                    WindowManager.LayoutParams.WRAP_CONTENT,
+//                    WindowManager.LayoutParams.WRAP_CONTENT,
+//                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+//                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+//                            WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+//                    PixelFormat.TRANSLUCENT
+//            );
+//
+//            final WindowManager windowManager = (WindowManager) context.getApplicationContext().getSystemService(WINDOW_SERVICE);
+//            LayoutInflater inflater = LayoutInflater.from(context.getApplicationContext());
+//            View view = inflater.inflate(R.layout.pop_window, null);
+//
+//            windowManager.addView(view, params);
+//
+//            // 延迟3秒后关闭弹窗并返回到应用程序界面
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (windowManager != null && view != null) {
+//                        windowManager.removeView(view);
+////                        finish(); // 返回原 Activity
+//                    }
+//                }
+//            }, 3000); // 延迟3秒
+//        }
     protected void showDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context);
         builder.setIcon(R.drawable.clock);
@@ -216,7 +265,6 @@ public class LockFragment extends Fragment {
         // Inflate the layout for this fragment
         return root;
     }
-
     //    /**
 //     * 判断某个activity是否在前台显示
 //     */
